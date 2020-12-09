@@ -4,6 +4,9 @@
   "description": "",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "bin": {
+    "mod-cli-spike-protect": "dist/index.js"
+  },
   "private": false,
   "license": "private",
   "scripts": {
