@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    // needs to be redefined in every config as the
+    // path is interpreted relative to config file.
+    "outDir": "./dist",
+    "declaration": true,
+    "incremental": true,
+    "target": "es2018",
+    "module": "commonjs",
+    "lib": ["es2018"],
+    "sourceMap": true,
+    "pretty": true,
+    "importHelpers": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noImplicitReturns": true,
+    "resolveJsonModule": true,
+    // configures build mode (via CLI option `-b`)
+    "rootDir": ".",
+    "composite": true,
+    "noImplicitAny": false,
+  }
+}

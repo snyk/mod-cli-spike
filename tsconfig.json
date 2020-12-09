@@ -1,0 +1,18 @@
+// this tsconfig file is responsible for building the whole workspace
+{
+  "extends": "./tsconfig.settings.json",
+  // note: this is included so that invoking the compiler in
+  // single project mode (rather than build mode) will fail.
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src"
+  },
+  "include": [
+    "./src/**/*"
+  ],
+  "references": [
+    { "path": "packages/mod-cli-spike-protect" },
+    { "path": "packages/mod-cli-spike-some-top-level-command" },
+    { "path": "packages/mod-cli-spike-woof" }
+  ]
+}
