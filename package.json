@@ -57,6 +57,7 @@
     "url": "ssh://git@github.com/snyk/mod-cli-spike.git"
   },
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
   }
 }
