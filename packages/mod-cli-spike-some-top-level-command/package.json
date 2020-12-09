@@ -10,7 +10,7 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@hammertime/mod-cli-spike-protect": "^1.13.0"
+    "@hammertime/mod-cli-spike-protect": "*"
   },
   "repository": {
     "type": "git",
