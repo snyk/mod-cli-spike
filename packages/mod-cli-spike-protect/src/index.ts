@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 export function doProtect() {
   console.log("doing stuff in protect");
 }
