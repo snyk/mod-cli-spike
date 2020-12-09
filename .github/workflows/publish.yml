@@ -1,0 +1,86 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Publish Workflow
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build_test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm install -g npm@7
+    - run: npx npm@7 install
+    - run: ./run.sh
+
+  build_publish:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+        registry-url: https://registry.npmjs.org/
+
+    - run: ls -la
+    - run: git config --global user.email "${{ secrets.GH_USER_EMAIL }}"
+    - run: git config --global user.name "${{ secrets.GH_USER }}"
+
+    - run: npm install -g npm@7
+    - run: npm --version
+    - run: npm install -g lerna
+    - run: which lerna
+    - run: npm install
+
+    # - name: Configure NPM
+    #   run: |
+    #     echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" >> .npmrc
+    #     echo '@hammertime:registry=https://registry.npmjs.org' >> .npmrc
+    #   env:
+    #     NODE_AUTH_TOKEN: ${{ secrets.NPMJS_TOKEN }}
+
+    # make git ignore the changes to .npmrc so lerna doesn't complain
+    - run: git update-index --skip-worktree -- .npmrc
+    - run: lerna publish minor --yes --registry=https://registry.npmjs.org
+      env:
+        NODE_AUTH_TOKEN: ${{secrets.NPMJS_TOKEN}}
+        
+    - name: Create binaries with pkg
+      run: |
+        echo '' > dist/STANDALONE
+        npx pkg . -t node14-alpine-x64 -o mod-cli-spike-alpine
+        npx pkg . -t node12-linux-x64 -o mod-cli-spike-linux
+        npx pkg . -t node12-macos-x64 -o mod-cli-spike-macos
+        npx pkg . -t node12-win-x64 -o mod-cli-spike-win.exe
+        # TODO: build docker release
+        # TODO: sign win binary
+        # TODO: shasum for win?
+        shasum -a 256 mod-cli-spike-linux > mod-cli-spike-linux.sha256 && shasum -a 256 mod-cli-spike-macos > mod-cli-spike-macos.sha256 && shasum -a 256 mod-cli-spike-alpine > mod-cli-spike-alpine.sha256
+        ls -la
+
+    - name: Create release
+      run: |
+        latest_tag=$(git describe --tags $(git rev-list --tags --max-count=1))
+        echo "latest_tag: ${latest_tag}"        
+        gh release create $latest_tag
+        gh release upload $latest_tag mod-cli-spike-alpine mod-cli-spike-linux mod-cli-spike-macos mod-cli-spike-win.exe mod-cli-spike-linux.sha256 mod-cli-spike-macos.sha256 mod-cli-spike-alpine.sha256
+      env:
+        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
