@@ -81,7 +81,12 @@ jobs:
 
     - name: Experiment with tags
       run: |
+        git --no-pager log --max-count=3
+        echo "tags:"
+        git tag
         git rev-list --tags --max-count=1
+        git_hash_latest_tag=$(git rev-list --tags --max-count=1) # this gets the commit hash of the latest tag (or empty of no tag)
+        echo "git_val: ${git_val}"
         # git describe --tags $(git rev-list --tags --max-count=1)
         # latest_tag=$(git describe --tags $(git rev-list --tags --max-count=1))
         # echo "latest_tag: ${latest_tag}"        
