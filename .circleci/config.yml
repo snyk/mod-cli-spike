@@ -122,7 +122,7 @@ jobs:
       - run:
           name: Configure NPM
           command: |
-            export NODE_AUTH_TOKEN=NPM_TOKEN
+            export NODE_AUTH_TOKEN=$NPM_TOKEN
             echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" >> .npmrc
             echo '@hammertime:registry=https://registry.npmjs.org' >> .npmrc
 
@@ -133,10 +133,10 @@ jobs:
 
       # Pseudo because lerna doesn't have an actualy --dry run and --canary is not the same thing
       # the `--skip-git` and `--skip-npm` options make it pseudo `--dry-run`
-      - run:
-          name: Pseudo Lerna Dry Run
-          command: |
-            lerna publish minor --no-push --skip-npm --yes --registry=https://registry.npmjs.org
+      # - run:
+      #     name: Pseudo Lerna Dry Run
+      #     command: |
+      #       lerna publish minor --no-push --skip-npm --yes --registry=https://registry.npmjs.org
 
       - run:
           name: Canary Lerna Publish
@@ -180,7 +180,7 @@ jobs:
       - run:
           name: Configure NPM
           command: |
-            export NODE_AUTH_TOKEN=NPM_TOKEN
+            export NODE_AUTH_TOKEN=$NPM_TOKEN
             echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" >> .npmrc
             echo '@hammertime:registry=https://registry.npmjs.org' >> .npmrc
 
