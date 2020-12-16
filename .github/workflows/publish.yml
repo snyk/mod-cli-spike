@@ -72,6 +72,15 @@ jobs:
         shasum -a 256 mod-cli-spike-linux > mod-cli-spike-linux.sha256 && shasum -a 256 mod-cli-spike-macos > mod-cli-spike-macos.sha256 && shasum -a 256 mod-cli-spike-alpine > mod-cli-spike-alpine.sha256
         ls -la
 
+    - name: Experiment with tags
+      run: |
+        git rev-list --tags --max-count=1
+        git describe --tags $(git rev-list --tags --max-count=1)
+        latest_tag=$(git describe --tags $(git rev-list --tags --max-count=1))
+        echo "latest_tag: ${latest_tag}"        
+      env:
+        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
     - name: Create release
       run: |
         latest_tag=$(git describe --tags $(git rev-list --tags --max-count=1))
