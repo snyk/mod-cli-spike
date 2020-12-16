@@ -46,6 +46,7 @@ jobs:
     - run: which lerna
     - run: npm install
     - run: git tag
+    - run: git --no-pager log --max-count=3
 
     - name: Configure NPM
       run: |
