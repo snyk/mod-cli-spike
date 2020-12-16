@@ -55,7 +55,7 @@ jobs:
 
     # make git ignore the changes to .npmrc so lerna doesn't complain
     - run: git update-index --skip-worktree -- .npmrc
-    - run: lerna publish minor --canary --yes --registry=https://registry.npmjs.org
+    - run: lerna publish minor --skip-npm --yes --registry=https://registry.npmjs.org
       env:
         NODE_AUTH_TOKEN: ${{secrets.NPMJS_TOKEN}}
         
