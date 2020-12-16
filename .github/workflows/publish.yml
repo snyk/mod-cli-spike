@@ -45,6 +45,7 @@ jobs:
     - run: npm install -g lerna
     - run: which lerna
     - run: npm install
+    - run: git tag
 
     - name: Configure NPM
       run: |
