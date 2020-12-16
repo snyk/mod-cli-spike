@@ -60,9 +60,10 @@ jobs:
 
 #     - name: Pseudo Lerna Dry Run
 #       run: |
-#         lerna publish minor --skip-git --skip-npm --yes --registry=https://registry.npmjs.org
+#         lerna publish minor --no-push --skip-npm --yes --registry=https://registry.npmjs.org
 #       env:
 #         NODE_AUTH_TOKEN: ${{secrets.NPMJS_TOKEN}}
+
 
     - run: lerna publish minor --canary --yes
       env:
