@@ -65,6 +65,30 @@ commands:
           name: Run CLI help text builder
           command: npm run generate-help
 
+  install_github_cli:
+    description: Install GitHub CLI (gh)
+    steps:
+      - run:
+          name: Install GitHub CLI (gh)
+          command: |
+            mkdir gh-download
+            curl -Lo ./gh-download/gh_1.3.1_linux_amd64.tar.gz https://github.com/cli/cli/releases/download/v1.3.1/gh_1.3.1_linux_amd64.tar.gz
+            tar -xf ./gh-download/gh_1.3.1_linux_amd64.tar.gz --directory gh-download
+            chmod a+x gh-download/gh_1.3.1_linux_amd64/bin/gh
+            mkdir -p /home/circleci/bin
+            mv gh-download/gh_1.3.1_linux_amd64/bin/gh /home/circleci/bin
+            which gh
+            gh --version
+
+  configure_git_credentials:
+    description: Configure Git Credentials
+    steps:
+      - run:
+          name: Configure Git Credentials
+          command: |
+            git config --global user.email "$GH_USER_EMAIL"
+            git config --global user.name "$GH_USER"
+
 jobs:
   canary-release:
     <<: *defaults
@@ -75,17 +99,7 @@ jobs:
       - checkout
       - setup_remote_docker:
           version: 19.03.13
-      - run:
-          name: Install gh (GitHub CLI)
-          command: |
-            mkdir gh-download
-            curl -Lo ./gh-download/gh_1.3.1_linux_amd64.tar.gz https://github.com/cli/cli/releases/download/v1.3.1/gh_1.3.1_linux_amd64.tar.gz
-            tar -xf ./gh-download/gh_1.3.1_linux_amd64.tar.gz --directory gh-download
-            chmod a+x gh-download/gh_1.3.1_linux_amd64/bin/gh
-            mkdir -p /home/circleci/bin
-            mv gh-download/gh_1.3.1_linux_amd64/bin/gh /home/circleci/bin
-            which gh
-            gh --version
+      - install_github_cli
       - show_node_version
       - run:
           name: Install npm@7
@@ -102,11 +116,7 @@ jobs:
             ls -la
             ls -la packages/*protect
 
-      - run:
-          name: Configure Git
-          command: | 
-            git config --global user.email "$GH_USER_EMAIL"
-            git config --global user.name "$GH_USER"
+      - configure_git_credentials
 
       - run:
           name: Configure NPM
@@ -137,6 +147,63 @@ jobs:
           command: |
             ./release-scripts/make-binaries.sh
 
+  legit-release:
+    <<: *defaults
+    docker:
+      - image: circleci/node:<< parameters.node_version >>
+    resource_class: small
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 19.03.13
+      - install_github_cli
+      - show_node_version
+      - run:
+          name: Install npm@7
+          command: |
+            sudo npm install -g npm@7
+      - show_node_version
+      - run:
+          name: Setup Lerna
+          command: sudo npm install -g lerna
+      - run:
+          name: npm install
+          command: |
+            npm install
+            ls -la
+            ls -la packages/*protect
+
+      - configure_git_credentials
+
+      - run:
+          name: Configure NPM
+          command: |
+            export NODE_AUTH_TOKEN=NPM_TOKEN
+            echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" >> .npmrc
+            echo '@hammertime:registry=https://registry.npmjs.org' >> .npmrc
+
+      - run:
+          name: Make git ignore changes to .npmrc
+          command: |
+            git update-index --skip-worktree -- .npmrc
+
+      # Pseudo because lerna doesn't have an actualy --dry run and --canary is not the same thing
+      # the `--skip-git` and `--skip-npm` options make it pseudo `--dry-run`
+      # - run:
+      #     name: Pseudo Lerna Dry Run
+      #     command: |
+      #       lerna publish minor --no-push --skip-npm --yes --registry=https://registry.npmjs.org
+
+      - run:
+          name: Lerna Publish
+          command: |
+            lerna publish minor --yes --registry=https://registry.npmjs.org
+
+      - run:
+          name: Create Binaries
+          command: |
+            ./release-scripts/make-binaries.sh
+
 workflows:
   version: 2
   test_and_release:
@@ -147,4 +214,11 @@ workflows:
           filters:
             branches:
               ignore:
+                - master
+      - legit-release:
+          name: Legit Release
+          node_version: '14'
+          filters:
+            branches:
+              only:
                 - master
