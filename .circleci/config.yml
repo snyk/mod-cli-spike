@@ -97,6 +97,7 @@ jobs:
     resource_class: small
     steps:
       - checkout
+      - add_ssh_keys
       - setup_remote_docker:
           version: 19.03.13
       - install_github_cli
@@ -154,6 +155,7 @@ jobs:
     resource_class: small
     steps:
       - checkout
+      - add_ssh_keys
       - setup_remote_docker:
           version: 19.03.13
       - install_github_cli
