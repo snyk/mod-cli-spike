@@ -184,7 +184,7 @@ jobs:
           name: Create Binaries
           command: |
             ./release-scripts/make-binaries.sh
-            ls -la
+            ls -la make-binaries
 
       - run:
           name: Add Assets to GitHub Release
@@ -201,14 +201,13 @@ jobs:
             echo "CIRCLE_TAG: ${CIRCLE_TAG}"
             echo "gh indicates latest release:"
             gh release list --limit 1
-            gh release upload $latest_tag |
-              binary-releases/mod-cli-spike-alpine |
-              binary-releases/mod-cli-spike-linux |
-              binary-releases/mod-cli-spike-macos |
-              binary-releases/mod-cli-spike-win.exe |
-              binary-releases/mod-cli-spike-linux.sha256 |
-              binary-releases/mod-cli-spike-macos.sha256 |
-              binary-releases/mod-cli-spike-alpine.sha256
+            gh release upload $latest_tag binary-releases/mod-cli-spike-alpine
+              # binary-releases/mod-cli-spike-linux |
+              # binary-releases/mod-cli-spike-macos |
+              # binary-releases/mod-cli-spike-win.exe |
+              # binary-releases/mod-cli-spike-linux.sha256 |
+              # binary-releases/mod-cli-spike-macos.sha256 |
+              # binary-releases/mod-cli-spike-alpine.sha256
 
 workflows:
   version: 2
