@@ -48,26 +48,16 @@ jobs:
     - run: git tag
     - run: git --no-pager log --max-count=3
 
-    - name: Configure NPM
-      run: |
-        echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" >> .npmrc
-        echo '@hammertime:registry=https://registry.npmjs.org' >> .npmrc
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPMJS_TOKEN }}
-
-    # make git ignore the changes to .npmrc so lerna doesn't complain
-    - run: git update-index --skip-worktree -- .npmrc
-
 #     - name: Pseudo Lerna Dry Run
 #       run: |
 #         lerna publish minor --no-push --skip-npm --yes --registry=https://registry.npmjs.org
 #       env:
-#         NODE_AUTH_TOKEN: ${{secrets.NPMJS_TOKEN}}
+#         NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
 
 
     - run: lerna publish minor --canary --yes --registry=https://registry.npmjs.org
       env:
-        NPM_TOKEN: ${{secrets.NPMJS_TOKEN}}
+        NPM_TOKEN: ${{secrets.NPM_TOKEN}}
         
     - name: Create binaries with pkg
       run: |
