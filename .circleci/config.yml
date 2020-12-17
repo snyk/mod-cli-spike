@@ -101,7 +101,6 @@ jobs:
       - setup_remote_docker:
           version: 19.03.13
       - install_github_cli
-      - show_node_version
       - run:
           name: Install npm@7
           command: |
@@ -159,7 +158,6 @@ jobs:
       - setup_remote_docker:
           version: 19.03.13
       - install_github_cli
-      - show_node_version
       - run:
           name: Install npm@7
           command: |
@@ -199,7 +197,7 @@ jobs:
       - run:
           name: Lerna Publish
           command: |
-            lerna publish minor --yes --registry=https://registry.npmjs.org
+            lerna publish minor --yes --message "chore: release [skip ci]" --registry=https://registry.npmjs.org
 
       - run:
           name: Create Binaries
