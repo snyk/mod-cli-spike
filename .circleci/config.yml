@@ -184,7 +184,7 @@ jobs:
           name: Create Binaries
           command: |
             ./release-scripts/make-binaries.sh
-            ls -la make-binaries
+            ls -la ./binary-releases
 
       - run:
           name: Add Assets to GitHub Release
