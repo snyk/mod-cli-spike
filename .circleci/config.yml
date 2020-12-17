@@ -177,7 +177,13 @@ jobs:
             # lerna publish minor --yes --message "chore: release [skip ci]"
 
       - run:
-          name: Experiment with tags
+          name: Create Binaries
+          command: |
+            ./release-scripts/make-binaries.sh
+            ls -la
+
+      - run:
+          name: Add Assets to GitHub Release
           command: |
             git --no-pager log --max-count=3
             echo "tags:"
@@ -191,11 +197,8 @@ jobs:
             echo "CIRCLE_TAG: ${CIRCLE_TAG}"
             echo "gh indicates latest release:"
             gh release list --limit 1
+            gh release upload $latest_tag mod-cli-spike-alpine mod-cli-spike-linux mod-cli-spike-macos mod-cli-spike-win.exe mod-cli-spike-linux.sha256 mod-cli-spike-macos.sha256 mod-cli-spike-alpine.sha256
 
-      - run:
-          name: Create Binaries
-          command: |
-            ./release-scripts/make-binaries.sh
 
 workflows:
   version: 2
