@@ -64,7 +64,6 @@ commands:
       - run:
           name: Run CLI help text builder
           command: npm run generate-help
-
   install_github_cli:
     description: Install GitHub CLI (gh)
     steps:
@@ -79,7 +78,6 @@ commands:
             mv gh-download/gh_1.3.1_linux_amd64/bin/gh /home/circleci/bin
             which gh
             gh --version
-
   configure_git_credentials:
     description: Configure Git Credentials
     steps:
@@ -121,8 +119,7 @@ jobs:
       - run:
           name: Canary Lerna Publish
           command: |
-            lerna publish minor --canary --yes
-            # lerna publish minor --canary --yes --registry=https://registry.npmjs.org
+            lerna publish preminor --force-publish --canary --yes
 
       - run:
           name: Create Binaries
