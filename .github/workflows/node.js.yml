@@ -26,4 +26,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm --version
     - run: npx npm@7 install
+      env:
+        NPM_TOKEN: ${{secrets.NPM_TOKEN}}
     - run: ./run.sh
