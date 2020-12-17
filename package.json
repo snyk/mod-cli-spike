@@ -1,6 +1,6 @@
 {
   "name": "@hammertime/mod-cli-spike",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "description": "",
   "files": [
     "dist",
@@ -32,9 +32,9 @@
     "packages/*"
   ],
   "dependencies": {
-    "@hammertime/mod-cli-spike-protect": "^0.13.0",
-    "@hammertime/mod-cli-spike-some-top-level-command": "^0.13.0",
-    "@hammertime/mod-cli-spike-woof": "^0.13.0",
+    "@hammertime/mod-cli-spike-protect": "^0.14.0",
+    "@hammertime/mod-cli-spike-some-top-level-command": "^0.14.0",
+    "@hammertime/mod-cli-spike-woof": "^0.14.0",
     "source-map-support": "^0.5.19"
   },
   "devDependencies": {
