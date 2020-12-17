@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.25.0](https://github.com/snyk/mod-cli-spike/compare/v0.24.0...v0.25.0) (2020-12-17)
+
+
+### Bug Fixes
+
+* fake fix to test changelog ([1964852](https://github.com/snyk/mod-cli-spike/commit/19648529f5433b2c0787109a84d3d209b3df900d))
+
+
+
+
+
+# [0.25.0](https://github.com/snyk/mod-cli-spike/compare/v0.24.0...v0.25.0) (2020-12-17)
+
+
+### Bug Fixes
+
+* fake fix to test changelog ([1964852](https://github.com/snyk/mod-cli-spike/commit/19648529f5433b2c0787109a84d3d209b3df900d))
+
+
+
+
+
 # [0.24.0](https://github.com/snyk/mod-cli-spike/compare/v0.23.0...v0.24.0) (2020-12-17)
 
 **Note:** Version bump only for package @hammertime/mod-cli-spike
