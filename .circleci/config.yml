@@ -122,6 +122,18 @@ jobs:
             lerna publish preminor --force-publish --canary --yes
 
       - run:
+          name: Experiment with tags
+          command: |
+            git --no-pager log --max-count=3
+            echo "tags:"
+            git tag
+            git rev-list --tags --max-count=1
+            git_hash_latest_tag=$(git rev-list --tags --max-count=1) # this gets the commit hash of the latest tag (or empty of no tag)
+            echo "git_val: ${git_val}"
+            echo "CIRCLE_SHA1: ${CIRCLE_SHA1}"
+            echo "CIRCLE_TAG: ${CIRCLE_TAG}"
+
+      - run:
           name: Create Binaries
           command: |
             ./release-scripts/make-binaries.sh
