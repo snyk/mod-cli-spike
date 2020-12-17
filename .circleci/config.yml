@@ -141,6 +141,10 @@ jobs:
           name: Create Binaries
           command: |
             ./release-scripts/make-binaries.sh
+            ls -la ./binary-releases
+
+      - store_artifacts:
+          path: ./binary-releases
 
   legit-release:
     <<: *defaults
@@ -197,8 +201,14 @@ jobs:
             echo "CIRCLE_TAG: ${CIRCLE_TAG}"
             echo "gh indicates latest release:"
             gh release list --limit 1
-            gh release upload $latest_tag mod-cli-spike-alpine mod-cli-spike-linux mod-cli-spike-macos mod-cli-spike-win.exe mod-cli-spike-linux.sha256 mod-cli-spike-macos.sha256 mod-cli-spike-alpine.sha256
-
+            gh release upload $latest_tag |
+              binary-releases/mod-cli-spike-alpine |
+              binary-releases/mod-cli-spike-linux |
+              binary-releases/mod-cli-spike-macos |
+              binary-releases/mod-cli-spike-win.exe |
+              binary-releases/mod-cli-spike-linux.sha256 |
+              binary-releases/mod-cli-spike-macos.sha256 |
+              binary-releases/mod-cli-spike-alpine.sha256
 
 workflows:
   version: 2
