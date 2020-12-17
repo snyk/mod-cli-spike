@@ -154,17 +154,11 @@ jobs:
 
       - configure_git_credentials
 
-      # Pseudo because lerna doesn't have an actualy --dry run and --canary is not the same thing
-      # the `--skip-git` and `--skip-npm` options make it pseudo `--dry-run`
-      # - run:
-      #     name: Pseudo Lerna Dry Run
-      #     command: |
-      #       lerna publish minor --no-push --skip-npm --yes
-
       - run:
           name: Lerna Publish
           command: |
-            lerna publish minor --yes --message "chore: release [skip ci]"
+            lerna publish minor --yes --message "chore: release [skip ci]" --create-release=github --conventional-commits
+            # lerna publish minor --yes --message "chore: release [skip ci]"
 
       - run:
           name: Create Binaries
