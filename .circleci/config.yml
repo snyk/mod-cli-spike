@@ -134,6 +134,8 @@ jobs:
             echo "latest_tag: ${latest_tag}"
             echo "CIRCLE_SHA1: ${CIRCLE_SHA1}"
             echo "CIRCLE_TAG: ${CIRCLE_TAG}"
+            echo "gh indicates latest release:"
+            gh release list --limit 1
 
       - run:
           name: Create Binaries
@@ -187,6 +189,8 @@ jobs:
             echo "latest_tag: ${latest_tag}"
             echo "CIRCLE_SHA1: ${CIRCLE_SHA1}"
             echo "CIRCLE_TAG: ${CIRCLE_TAG}"
+            echo "gh indicates latest release:"
+            gh release list --limit 1
 
       - run:
           name: Create Binaries
