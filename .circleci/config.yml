@@ -128,8 +128,10 @@ jobs:
             echo "tags:"
             git tag
             git rev-list --tags --max-count=1
-            git_hash_latest_tag=$(git rev-list --tags --max-count=1) # this gets the commit hash of the latest tag (or empty of no tag)
-            echo "git_val: ${git_val}"
+            git_hash_latest=$(git rev-list --tags --max-count=1) # this gets the commit hash of the latest tag (or empty of no tag)
+            echo "git_hash_latest: ${git_hash_latest}"
+            latest_tag=$(git describe --tags $(git rev-list --tags --max-count=1))
+            echo "latest_tag: ${latest_tag}"
             echo "CIRCLE_SHA1: ${CIRCLE_SHA1}"
             echo "CIRCLE_TAG: ${CIRCLE_TAG}"
 
@@ -179,8 +181,10 @@ jobs:
             echo "tags:"
             git tag
             git rev-list --tags --max-count=1
-            git_hash_latest_tag=$(git rev-list --tags --max-count=1) # this gets the commit hash of the latest tag (or empty of no tag)
-            echo "git_val: ${git_val}"
+            git_hash_latest=$(git rev-list --tags --max-count=1) # this gets the commit hash of the latest tag (or empty of no tag)
+            echo "git_hash_latest: ${git_hash_latest}"
+            latest_tag=$(git describe --tags $(git rev-list --tags --max-count=1))
+            echo "latest_tag: ${latest_tag}"
             echo "CIRCLE_SHA1: ${CIRCLE_SHA1}"
             echo "CIRCLE_TAG: ${CIRCLE_TAG}"
 
