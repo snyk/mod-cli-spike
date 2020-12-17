@@ -1,6 +1,6 @@
 {
   "name": "@hammertime/mod-cli-spike-some-top-level-command",
-  "version": "0.21.0",
+  "version": "0.22.0",
   "description": "",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -10,7 +10,7 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@hammertime/mod-cli-spike-protect": "^0.21.0"
+    "@hammertime/mod-cli-spike-protect": "^0.22.0"
   },
   "repository": {
     "type": "git",
