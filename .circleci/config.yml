@@ -86,6 +86,9 @@ commands:
           command: |
             git config --global user.email "$GH_USER_EMAIL"
             git config --global user.name "$GH_USER"
+            echo -e "$GPG_KEY" | gpg --import
+            git config --global commit.gpgsign true
+            git config --global user.signingkey $GPG_ID
 
 jobs:
   canary-release:
