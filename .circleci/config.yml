@@ -90,19 +90,6 @@ commands:
             git config --global commit.gpgsign true
             git config --global user.signingkey $GPG_ID
 
-            echo "about to test gpg version"
-            gpg --version
-            # git config --global gpg.program gpg2
-
-            echo "about to import key:"
-            echo -e "$GPG_KEY" | gpg --import
-
-            echo "about to set commit.gpgsign true:"
-            git config --global commit.gpgsign true
-
-            echo "about to set GPG_ID:"
-            git config --global user.signingkey $GPG_ID
-
 jobs:
   canary-release:
     <<: *defaults
