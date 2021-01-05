@@ -87,6 +87,19 @@ commands:
             git config --global user.email "$GH_USER_EMAIL"
             git config --global user.name "$GH_USER"
 
+            echo "about to test gpg version"
+            gpg --version
+            git config --global gpg.program gpg2
+
+            echo "about to import key:"
+            echo -e "$GPG_KEY" | gpg --import
+
+            echo "about to set commit.gpgsign true:"
+            git config --global commit.gpgsign true
+
+            echo "about to set GPG_ID:"
+            git config --global user.signingkey $GPG_ID
+
 jobs:
   canary-release:
     <<: *defaults
@@ -98,6 +111,7 @@ jobs:
       - add_ssh_keys
       - setup_remote_docker:
           version: 19.03.13
+      - configure_git_credentials
       - install_github_cli
       - run:
           name: Install npm@7
@@ -113,8 +127,6 @@ jobs:
             npm install
             ls -la
             ls -la packages/*protect
-
-      - configure_git_credentials
 
       - run:
           name: Canary Lerna Publish
