@@ -92,7 +92,7 @@ commands:
 
             echo "about to test gpg version"
             gpg --version
-            git config --global gpg.program gpg2
+            # git config --global gpg.program gpg2
 
             echo "about to import key:"
             echo -e "$GPG_KEY" | gpg --import
