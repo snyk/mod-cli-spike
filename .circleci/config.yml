@@ -119,9 +119,30 @@ jobs:
             ls -la packages/*protect
 
       - run:
+          name: Update package versions
+          command: ./release-scripts/update-versions.sh
+
+      - run:
+          name: Make git ignore changes relating to version updates
+          command: |
+            git update-index --skip-worktree -- ./lerna.json
+            git update-index --skip-worktree -- ./package.json
+            git update-index --skip-worktree -- ./packages/mod-cli-spike-protect/package.json
+            git update-index --skip-worktree -- ./packages/mod-cli-spike-some-top-level-command/package.json
+            git update-index --skip-worktree -- ./packages/mod-cli-spike-woof/package.json
+
+      - run:
           name: Canary Lerna Publish
           command: |
+            # lerna publish preminor --force-publish --canary --yes --no-git-reset --skip-git
+            # Orig:
             lerna publish preminor --force-publish --canary --yes
+
+      - run:
+          name: See what lerna did
+          command: |
+            cat ./lerna.json ./package.json ./packages/mod-cli-spike-protect/package.json ./packages/mod-cli-spike-some-top-level-command/package.json ./packages/mod-cli-spike-woof/package.json | grep version
+            cat ./package.json | grep "hammertime/mod-cli-spike"
 
       - run:
           name: Experiment with tags
