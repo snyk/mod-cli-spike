@@ -6,7 +6,6 @@ import { doTopLevelCommandThing } from "@hammertime/mod-cli-spike-some-top-level
 
 function main() {
   console.log("hello from the root module");
-  
   doProtect();
   doWoof();
   doTopLevelCommandThing();
