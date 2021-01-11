@@ -188,6 +188,9 @@ jobs:
       - run:
           name: Setup Lerna
           command: sudo npm install -g lerna
+      
+      - configure_git_credentials
+
       - run:
           name: npm install
           command: |
@@ -195,7 +198,18 @@ jobs:
             ls -la
             ls -la packages/*protect
 
-      - configure_git_credentials
+      - run:
+          name: Update package versions
+          command: ./release-scripts/update-versions.sh
+
+      - run:
+          name: Make git ignore changes relating to version updates
+          command: |
+            git update-index --skip-worktree -- ./lerna.json
+            git update-index --skip-worktree -- ./package.json
+            git update-index --skip-worktree -- ./packages/mod-cli-spike-protect/package.json
+            git update-index --skip-worktree -- ./packages/mod-cli-spike-some-top-level-command/package.json
+            git update-index --skip-worktree -- ./packages/mod-cli-spike-woof/package.json
 
       - run:
           name: Lerna Publish
