@@ -214,7 +214,7 @@ jobs:
       - run:
           name: Lerna Publish
           command: |
-            lerna publish minor --yes --create-release=github --conventional-commits --no-changelog --no-push
+            lerna publish minor --yes
             # lerna publish minor --yes --message "chore: release [skip ci]" --create-release=github --conventional-commits --no-changelog
             # lerna publish minor --yes --message "chore: release [skip ci]"
 
