@@ -1,6 +1,6 @@
 {
   "name": "@hammertime/mod-cli-spike",
-  "version": "1.0.0-monorepo",
+  "version": "1.0.0",
   "description": "",
   "files": [
     "dist",
@@ -32,9 +32,9 @@
     "packages/*"
   ],
   "dependencies": {
-    "@hammertime/mod-cli-spike-protect": "1.0.0-monorepo",
-    "@hammertime/mod-cli-spike-some-top-level-command": "1.0.0-monorepo",
-    "@hammertime/mod-cli-spike-woof": "1.0.0-monorepo",
+    "@hammertime/mod-cli-spike-protect": "^1.0.0",
+    "@hammertime/mod-cli-spike-some-top-level-command": "^1.0.0",
+    "@hammertime/mod-cli-spike-woof": "^1.0.0",
     "source-map-support": "^0.5.19"
   },
   "devDependencies": {
