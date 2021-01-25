@@ -227,6 +227,10 @@ jobs:
             npm view @hammertime/mod-cli-spike --json | jq .version -r
             latest_npm_release_version=$(npm view @hammertime/mod-cli-spike --json | jq .version -r)
             echo "latest_npm_release_version: ${latest_npm_release_version}"
+            echo "lerna.json":
+            cat lerna.json
+            latest_version_per_lerna_json=$(cat lerna.json | jq .version -r)
+            echo "latest_version_per_lerna_json: ${latest_version_per_lerna_json}"
 
       - run:
           name: Create a GitHub release
