@@ -219,6 +219,18 @@ jobs:
             # lerna publish minor --yes --message "chore: release [skip ci]"
 
       - run:
+          name: Get new tag
+          command: |
+            export new_tag="v1.2.3"  # TODO: make real
+            echo "new_tag: ${new_tag}"
+
+      - run:
+          name: Create a GitHub release
+          command: |
+            echo "new_tag: ${new_tag}"
+            # gh release create ${new_tag} --title "${new_tag}" -n "Release notes not implemented yet"
+
+      - run:
           name: Create Binaries
           command: |
             ./release-scripts/make-binaries.sh
