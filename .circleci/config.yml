@@ -219,20 +219,6 @@ jobs:
             # lerna publish minor --yes --message "chore: release [skip ci]"
 
       - run:
-          name: Get new tag
-          command: |
-            export new_tag="v1.2.3"  # TODO: make real
-            echo "new_tag: ${new_tag}"
-            npm view @hammertime/mod-cli-spike --json
-            npm view @hammertime/mod-cli-spike --json | jq .version -r
-            latest_npm_release_version=$(npm view @hammertime/mod-cli-spike --json | jq .version -r)
-            echo "latest_npm_release_version: ${latest_npm_release_version}"
-            echo "lerna.json":
-            cat lerna.json
-            latest_version_per_lerna_json=$(cat lerna.json | jq .version -r)
-            echo "latest_version_per_lerna_json: ${latest_version_per_lerna_json}"
-
-      - run:
           name: Create a GitHub release
           command: |
             latest_version=$(cat lerna.json | jq .version -r)
