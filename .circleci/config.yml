@@ -235,8 +235,9 @@ jobs:
       - run:
           name: Create a GitHub release
           command: |
-            echo "placeholder"
-            # gh release create ${new_tag} --title "${new_tag}" -n "Release notes not implemented yet"
+            latest_version=$(cat lerna.json | jq .version -r)
+            new_tag="v${latest_version}"
+            gh release create ${new_tag} --title "${new_tag}" -n "Release notes not implemented yet"
 
       - run:
           name: Create Binaries
