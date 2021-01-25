@@ -91,7 +91,7 @@ commands:
 #            git config --global user.signingkey $GPG_ID
 
 jobs:
-  canary-release:
+  dev-release:
     <<: *defaults
     docker:
       - image: circleci/node:<< parameters.node_version >>
@@ -132,7 +132,7 @@ jobs:
             git update-index --skip-worktree -- ./packages/mod-cli-spike-woof/package.json
 
       - run:
-          name: Canary Lerna Publish
+          name: Dev Lerna Publish
           command: |
             # lerna publish preminor --force-publish --canary --yes --no-git-reset --skip-git
             # Orig:
@@ -219,17 +219,17 @@ jobs:
             # lerna publish minor --yes --message "chore: release [skip ci]"
 
       - run:
+          name: Create Binaries
+          command: |
+            ./release-scripts/make-binaries.sh
+            ls -la ./binary-releases
+
+      - run:
           name: Create a GitHub release
           command: |
             latest_version=$(cat lerna.json | jq .version -r)
             new_tag="v${latest_version}"
             gh release create ${new_tag} --title "${new_tag}" -n "Release notes not implemented yet"
-
-      - run:
-          name: Create Binaries
-          command: |
-            ./release-scripts/make-binaries.sh
-            ls -la ./binary-releases
 
       - run:
           name: Add Assets to GitHub Release
@@ -261,8 +261,8 @@ workflows:
   version: 2
   test_and_release:
     jobs:
-      - canary-release:
-          name: Canary Release
+      - dev-release:
+          name: Dev Release
           node_version: '14'
           filters:
             branches:
