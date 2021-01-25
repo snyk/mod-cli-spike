@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-LATEST_PACKAGE_VERSION=$(npm info @hammertime/mod-cli-spike --json | jq .version -r)
+LATEST_PACKAGE_VERSION=$(gh api "repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/latest" | jq .tag_name -r)
 echo "LATEST_PACKAGE_VERSION: ${LATEST_PACKAGE_VERSION}"
 
 echo "versions before modifying:"
