@@ -223,11 +223,15 @@ jobs:
           command: |
             export new_tag="v1.2.3"  # TODO: make real
             echo "new_tag: ${new_tag}"
+            npm view @hammertime/mod-cli-spike --json
+            npm view @hammertime/mod-cli-spike --json | jq .version -r
+            latest_npm_release_version=$(npm view @hammertime/mod-cli-spike --json | jq .version -r)
+            echo "latest_npm_release_version: ${latest_npm_release_version}"
 
       - run:
           name: Create a GitHub release
           command: |
-            echo "new_tag: ${new_tag}"
+            echo "placeholder"
             # gh release create ${new_tag} --title "${new_tag}" -n "Release notes not implemented yet"
 
       - run:
