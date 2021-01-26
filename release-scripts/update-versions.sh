@@ -2,6 +2,7 @@
 set -e
 
 LATEST_PACKAGE_VERSION=$(gh api "repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/latest" | jq .tag_name -r)
+LATEST_PACKAGE_VERSION=${LATEST_PACKAGE_VERSION:1}
 echo "LATEST_PACKAGE_VERSION: ${LATEST_PACKAGE_VERSION}"
 
 echo "versions before modifying:"
