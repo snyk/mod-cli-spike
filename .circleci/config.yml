@@ -134,9 +134,18 @@ jobs:
       - run:
           name: Dev Lerna Publish
           command: |
+            dev_version="1.0.0-dev-${CIRCLE_SHA1}"
+            echo "dev_version: ${dev_version}"
+            # lerna version $dev_version --yes --no-push --no-git-tag-version
+            # cat lerna.json
+            # cat package.json | grep version
+            # lerna publish --yes --no-push --no-git-tag-version
+            lerna publish ${dev_version} --yes --no-push --no-git-tag-version --dist-tag dev
+
             # lerna publish preminor --force-publish --canary --yes --no-git-reset --skip-git
-            # Orig:
-            lerna publish preminor --force-publish --canary --yes
+            
+            # Orig (working before jan 25):
+            # lerna publish preminor --force-publish --canary --yes
 
       - run:
           name: See what lerna did
