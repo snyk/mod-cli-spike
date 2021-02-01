@@ -19,10 +19,12 @@
     "test:unit": "jest",
     "test:coverage": "npm run test:unit -- --coverage",
     "test:watch": "tsc-watch --onSuccess 'npm run test:unit'",
-    "prepare": "./scripts/prepare.sh && npm run build",
+    "prepare": "npm run build",
     "prepare-not-used": "npm run build && lerna run prepare",
     "lint": "prettier --check 'packages/*/{src,test}/**/*.ts' && eslint 'packages/*/{src,test}/**/*.ts'",
-    "format": "prettier --write 'packages/*/{src,test}/**/*.ts' && eslint --fix 'packages/*/{src,test}/**/*.ts'"
+    "format": "prettier --write 'packages/*/{src,test}/**/*.ts' && eslint --fix 'packages/*/{src,test}/**/*.ts'",
+    "test-win-env": "bash ./scripts/test-win.sh",
+    "test-win-env-2": "scripts/test-win.cmd"
   },
   "author": "Snyk",
   "license": "private",
@@ -35,7 +37,8 @@
     "@hammertime/mod-cli-spike-protect": "1.0.0-monorepo",
     "@hammertime/mod-cli-spike-some-top-level-command": "1.0.0-monorepo",
     "@hammertime/mod-cli-spike-woof": "1.0.0-monorepo",
-    "source-map-support": "^0.5.19"
+    "source-map-support": "^0.5.19",
+    "snyk-resolve-deps": "4.7.1"
   },
   "devDependencies": {
     "@types/jest": "^25.2.3",

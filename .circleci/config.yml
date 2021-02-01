@@ -1,13 +1,17 @@
 version: 2.1
 
 orbs:
-  win: circleci/windows@2.2.0
+  win: circleci/windows@2.4.0
+  node: circleci/node@4.1.0
 
 defaults: &defaults
   parameters:
     node_version:
       type: string
       default: ''
+    use_npm7:
+      type: boolean
+      default: true
   working_directory: ~/snyk
 
 windows_defaults: &windows_defaults
@@ -36,7 +40,7 @@ commands:
           root: .
           paths:
             - dist/
-  install_node_npm:
+  install_node_nvm:
     description: Install correct Node version
     parameters:
       node_version:
@@ -49,6 +53,17 @@ commands:
       - run:
           name: Use correct version of Node
           command: nvm use << parameters.node_version >>
+
+  nuke_node_windows:
+    description: Nuke all node things on Windows executor
+    steps:
+      - run:
+          name: Delete node related folders
+          shell: bash.exe
+          command: |
+            rm -rf /c/ProgramData/nvm
+            rm -rf /c/"Program Files"/nodejs
+
   install_shellspec:
     description: Install Shellspec
     steps:
@@ -60,10 +75,11 @@ commands:
     steps:
       - run:
           name: Node version
-          command: node --version
-      - run:
-          name: NPM version
-          command: npm --version
+          command: |
+            node --version
+            npm --version
+            which node
+            which npm
   generate_help:
     description: Generate CLI help files
     steps:
@@ -280,15 +296,64 @@ jobs:
       - attach_workspace:
           at: ~/snyk
       - show_node_version
+      - nuke_node_windows
       - run:
-          name: Try Chocolatey Node Install
+          name: Install Node with Chocolatey
           command: |
-            choco install nodejs --version=14.15.4
-            node --version
-            npm --version
-            npm install -g npm@7
-            node --version
-            npm --version
+            $current_node_version = node --version
+            nvm uninstall $current_node_version
+            choco install nodejs --version=<< parameters.node_version >>
+      - show_node_version
+      - when:
+          condition:  << parameters.use_npm7 >>
+          steps:
+            - run: npm install -g npm@7
+      - show_node_version
+      - run:
+          name: Try windows env thing
+          shell: bash.exe
+          command: |
+            npm run test-win-env
+      - run:
+          name: Try windows env thing with powershell
+          command: |
+            npm run test-win-env-2
+      - run:
+          name: npm install
+          command: |
+            npm install --ignore-scripts
+
+  test-windows-nvm:
+    <<: *defaults
+    <<: *windows_defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/snyk
+      - show_node_version
+      - install_node_nvm:
+          node_version: << parameters.node_version >>
+      - show_node_version
+      - when:
+          condition:  << parameters.use_npm7 >>
+          steps:
+            - run: npm install -g npm@7
+      - show_node_version
+      - run:
+          name: npm install
+          command: |
+            npm install --ignore-scripts
+  
+  test-windows-no-node-bash:
+    <<: *defaults
+    executor:
+      name: win/default
+      shell: bash.exe
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/snyk
+      - show_node_version
 
 workflows:
   version: 2
@@ -302,11 +367,51 @@ workflows:
               ignore:
                 - master
       - test-windows:
-          name: Test Windows
+          name: Test Windows with Node 14
+          node_version: '14.15.4'
           filters:
             branches:
               ignore:
                 - master
+      - test-windows:
+          name: Test Windows with Node 12
+          node_version: '12.16.2'
+          filters:
+            branches:
+              ignore:
+                - master
+      - test-windows:
+          name: Test Windows with Node 10
+          node_version: '10.23.1'
+          filters:
+            branches:
+              ignore:
+                - master
+      - test-windows:
+          name: Test Windows with Node 8
+          node_version: '8.17.0'
+          use_npm7: false
+          filters:
+            branches:
+              ignore:
+                - master
+
+      - test-windows-nvm:
+          name: Test Windows with Node 10 with nvm
+          node_version: '10.23.1'
+          filters:
+            branches:
+              ignore:
+                - master
+
+      - test-windows-no-node-bash:
+          name: Test Windows without node
+          node_version: '10.23.1'
+          filters:
+            branches:
+              ignore:
+                - master
+
       - legit-release:
           name: Legit Release
           node_version: '14'
