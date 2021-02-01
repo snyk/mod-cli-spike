@@ -10,6 +10,12 @@ defaults: &defaults
       default: ''
   working_directory: ~/snyk
 
+windows_defaults: &windows_defaults
+  environment:
+    npm_config_loglevel: silent
+  executor:
+    name: win/default
+
 commands:
   install_deps:
     description: Install dependencies
@@ -266,6 +272,24 @@ jobs:
               binary-releases/mod-cli-spike-macos.sha256 \
               binary-releases/mod-cli-spike-alpine.sha256
 
+  test-windows:
+    <<: *defaults
+    <<: *windows_defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/snyk
+      - show_node_version
+      - run:
+          name: Try Chocolatey Node Install
+          command: |
+            choco install nodejs --version=14.15.4
+            node --version
+            npm --version
+            npm install -g npm@7
+            node --version
+            npm --version
+
 workflows:
   version: 2
   test_and_release:
@@ -273,6 +297,12 @@ workflows:
       - dev-release:
           name: Dev Release
           node_version: '14'
+          filters:
+            branches:
+              ignore:
+                - master
+      - test-windows:
+          name: Test Windows
           filters:
             branches:
               ignore:
